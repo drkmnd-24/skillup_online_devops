@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillUp Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script type="module" src="{% static 'js/config.js' %}"></script>
+    <script type="module" src="{% static 'js/auth.js' %}"></script>
+    <script type="module" src="{% static 'js/profile.js' %}"></script>
+    <script type="module" src="{% static 'js/tasks.js' %}"></script>
+    <script type="module" src="{% static 'js/ui.js' %}"></script>
+  </head>
+  <body>
+    <div class="navbar">
+      <h2>Welcome <span id="profile-knox-id"></span> to CNF</h2>
+      <div class="profile-menu">
+        <button id="profile-btn">Profile</button>
+        <div class="dropdown-context" id="profile-dropdown">
+          <a href="#" id="logout-btn">Logout</a>
+        </div>
+      </div>
+    </div>
+    <div class="task-container">
+      <div class="task-column">
+        <h3>Assigned Tasks</h3>
+        <div id="assigned-tasks" class="task-list"></div>
+      </div>
+      <div class="task-column">
+        <h3>Ongoing Tasks</h3>
+        <div id="ongoing-tasks" class="task-list"></div>
+      </div>
+      <div class="task-column">
+        <h3>Done Tasks</h3>
+        <div id="done-tasks" class="task-list"></div>
+      </div>
+    </div>
+  </body>
+</html>
