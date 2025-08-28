@@ -4,7 +4,7 @@ from skillup.views import login_view, register_view, index_view, task_detail_vie
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include("main_app.api_urls")),
+    path("api/", include("skillup.api_urls")),
     path("login/", login_view, name="login"),
     path("register/", register_view, name="register-user"),
     path("index/", index_view, name="index"),

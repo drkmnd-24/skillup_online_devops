@@ -41,14 +41,14 @@ class TaskAdmin(admin.ModelAdmin):
         task.review_status = 'passed'
         task.save()
         self.message_user(request, f'Task {task.title} marked as PASSED')
-        return redirect('admin:main_app_task_changelist')
+        return redirect('admin:skillup_task_changelist')
 
     def mark_fail(self, request, task_id):
         task = get_object_or_404(Task, pk=task_id)
         task.review_status = 'failed'
         task.save()
         self.message_user(request, f'Task {task.title} marked as FAILED')
-        return redirect('admin:main_app_task_changelist')
+        return redirect('admin:skillup_task_changelist')
 
     def get_changeform_initial_data(self, request):
         initial = super().get_changeform_initial_data(request)
@@ -73,7 +73,7 @@ class MarkdownFileAdmin(admin.ModelAdmin):
         return 'No content available'
 
     def modify_button(self, obj):
-        url = reverse('admin:main_app_modifiedmarkdownfile_add') + f'?original_file={obj.id}'
+        url = reverse('admin:skillup_modifiedmarkdownfile_add') + f'?original_file={obj.id}'
         return format_html('<a class="button" href="{}">Modify</a>', url)
 
     view_content.short_description = 'Markdown Preview'
@@ -101,7 +101,7 @@ class ModifiedMarkdownFileAdmin(admin.ModelAdmin):
         return 'No modified content available'
 
     def submit_button(self, obj):
-        url = reverse('admin:main_app_submittedmarkdownfile_add') + f'?modified_file={obj.id}'
+        url = reverse('admin:skillup_submittedmarkdownfile_add') + f'?modified_file={obj.id}'
         return format_html('<a class="button" href="{}">Submit</a>', url)
 
     view_modified_content.short_description = 'Modified Content'
@@ -141,7 +141,7 @@ class SubmitMarkdownFileAdmin(admin.ModelAdmin):
         return 'No final content available'
 
     def assigned_button(self, obj):
-        url = reverse('admin:main_app_task_add') + f'?submitted_file={obj.id}'
+        url = reverse('admin:skillup_task_add') + f'?submitted_file={obj.id}'
         return format_html('<a href="{}">Assign to Student</a>', url)
 
     view_submitted_content.short_description = 'Submitted Markdown Preview'
