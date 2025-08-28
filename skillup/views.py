@@ -22,6 +22,7 @@ from .serializers import (
 
 User = get_user_model()
 
+
 @method_decorator(csrf_exempt, name='dispatch')
 class HybridLoginView(APIView):
     authentication_classes = []
@@ -39,18 +40,23 @@ class HybridLoginView(APIView):
         # simple session auth response
         return Response({'detail': 'Hybrid login successful'}, status=status.HTTP_200_OK)
 
+
 def login_view(request):
     return render(request, "login.html")
+
 
 def register_view(request):
     return render(request, "register.html")
 
+
 def index_view(request):
     return render(request, "index.html")
+
 
 @login_required
 def task_view(request, task_id):
     return render(request, "tasks.html", {"task_id": task_id})
+
 
 @login_required
 def task_detail_view(request, pk):
@@ -68,6 +74,7 @@ def task_detail_view(request, pk):
         'is_review': is_review
     })
 
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_user_profile(request):
@@ -80,11 +87,13 @@ def get_user_profile(request):
         'project': user.project
     }, status=status.HTTP_200_OK)
 
+
 class IsAdminOrReadOnly(BasePermission):
     def has_permission(self, request, view):
         if request.method in ['GET', 'HEAD', 'OPTIONS']:
             return True
         return request.user.is_staff
+
 
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
@@ -116,15 +125,18 @@ class TaskViewSet(viewsets.ModelViewSet):
         task.status = 'submitted'
         task.time_taken = time_taken
         task.save()
-        return Response({'message': 'Task Submitted', 'status': task.status, 'time_taken': task.time_taken}, status=status.HTTP_200_OK)
+        return Response({'message': 'Task Submitted', 'status': task.status, 'time_taken': task.time_taken},
+                        status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
     def complete(self, request, pk=None):
         task = self.get_object()
         if request.user != task.assigned_to:
-            return Response({'Error': 'you can only complete your own assigned tasks'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'Error': 'you can only complete your own assigned tasks'},
+                            status=status.HTTP_403_FORBIDDEN)
         if task.status not in ('ongoing', 'submitted'):
-            return Response({'Error': 'you can only complete tasks that are in progress or submitted'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'Error': 'you can only complete tasks that are in progress or submitted'},
+                            status=status.HTTP_403_FORBIDDEN)
         task.complete_task()
         return Response({'message': 'Task marked as done', 'status': task.status}, status=status.HTTP_200_OK)
 
@@ -137,10 +149,12 @@ class TaskViewSet(viewsets.ModelViewSet):
         task.save()
         return Response({'message': 'Task marked as failed', 'status': task.status}, status=status.HTTP_200_OK)
 
+
 class MarkdownFileViewSet(viewsets.ModelViewSet):
     queryset = MarkdownFile.objects.all()
     serializer_class = MarkdownFileSerializer
     permission_classes = [IsAdminUser]
+
 
 class ModifiedMarkdownFileViewSet(viewsets.ModelViewSet):
     queryset = ModifiedMarkdownFile.objects.all()
@@ -155,6 +169,7 @@ class ModifiedMarkdownFileViewSet(viewsets.ModelViewSet):
             serializer.save(modified_by=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class SubmittedMarkdownFileViewSet(viewsets.ModelViewSet):
     queryset = SubmittedMarkdownFile.objects.all()

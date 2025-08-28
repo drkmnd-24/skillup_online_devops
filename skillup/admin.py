@@ -8,6 +8,7 @@ from .admin_forms import ModifiedMarkdownFileForm
 
 admin.site.register(User)
 
+
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'assigned_to', 'status', 'review_status', 'review_actions')
@@ -23,6 +24,7 @@ class TaskAdmin(admin.ModelAdmin):
                 pass_url, fail_url
             )
         return 'N/A'
+
     review_actions.short_description = 'Review'
 
     def get_urls(self):
@@ -55,6 +57,7 @@ class TaskAdmin(admin.ModelAdmin):
             initial['submitted_file'] = submitted_file_id
         return initial
 
+
 @admin.register(MarkdownFile)
 class MarkdownFileAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'upload_at', 'view_content', 'modify_button')
@@ -75,6 +78,7 @@ class MarkdownFileAdmin(admin.ModelAdmin):
 
     view_content.short_description = 'Markdown Preview'
     modify_button.short_description = 'Modify Markdown'
+
 
 @admin.register(ModifiedMarkdownFile)
 class ModifiedMarkdownFileAdmin(admin.ModelAdmin):
@@ -111,6 +115,7 @@ class ModifiedMarkdownFileAdmin(admin.ModelAdmin):
         if request.user.is_authenticated:
             initial['modified_by'] = request.user.pk
         return initial
+
 
 @admin.register(SubmittedMarkdownFile)
 class SubmitMarkdownFileAdmin(admin.ModelAdmin):

@@ -2,8 +2,10 @@ import os
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
+
 class UserManager(BaseUserManager):
-    def create_user(self, knox_id, email=None, password=None, department=None, lab_part=None, project=None, **extra_fields):
+    def create_user(self, knox_id, email=None, password=None, department=None, lab_part=None, project=None,
+                    **extra_fields):
         if not knox_id:
             raise ValueError('Knox ID must be set')
         email = self.normalize_email(email) if email else None
@@ -25,6 +27,7 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(knox_id, email, password, **extra_fields)
+
 
 class User(AbstractUser):
     knox_id = models.CharField(max_length=50, unique=True)
@@ -57,6 +60,7 @@ class User(AbstractUser):
     def __str__(self):
         return f'{self.knox_id} - {self.email}'
 
+
 class MarkdownFile(models.Model):
     title = models.CharField(max_length=255)
     file = models.FileField(upload_to='admin_md_files/')
@@ -64,6 +68,7 @@ class MarkdownFile(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class ModifiedMarkdownFile(models.Model):
     original_file = models.ForeignKey(MarkdownFile, on_delete=models.CASCADE, related_name='modifications')
@@ -74,12 +79,14 @@ class ModifiedMarkdownFile(models.Model):
     def __str__(self):
         return f'Modified: {self.original_file} by {self.modified_by.knox_id}'
 
+
 class SubmittedMarkdownFile(models.Model):
     modified_file = models.OneToOneField(ModifiedMarkdownFile, on_delete=models.CASCADE)
     submitted_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'Submitted: {self.modified_file.original_file.title}'
+
 
 class Task(models.Model):
     STATUS_CHOICE = [
