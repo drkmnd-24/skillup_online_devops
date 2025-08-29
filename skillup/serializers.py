@@ -16,7 +16,13 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("id", "knox_id", "email", "password", "department", "lab_part", "project")
+        fields = ("id", "username", "email", "first_name", "last_name", "password")
+        extra_kwargs = {'email': {'required': False, 'allow_null': True, 'allow_blank': True}}
+
+    def validate_email(self, value):
+        if value and User.objects.filter(email=value).exists():
+            raise serializers.ValidationError('Email is already in use')
+        return value
 
     def create(self, validated_data):
         password = validated_data.pop("password")
