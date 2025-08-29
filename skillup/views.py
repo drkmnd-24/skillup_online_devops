@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.views import APIView
 
-from rest_framework import permissions, viewsets, status
+from rest_framework import permissions, viewsets, status, mixins
 
 from .models import Task, MarkdownFile, ModifiedMarkdownFile, SubmittedMarkdownFile
 from .serializers import (
@@ -148,6 +148,12 @@ class TaskViewSet(viewsets.ModelViewSet):
         task.status = 'failed'
         task.save()
         return Response({'message': 'Task marked as failed', 'status': task.status}, status=status.HTTP_200_OK)
+
+
+class UserRegistrationViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    serializer_class = UserRegistrationSerializer
+    permission_classes = [permissions.AllowAny]
+    queryset = User.objects.none()
 
 
 class MarkdownFileViewSet(viewsets.ModelViewSet):
